@@ -41,7 +41,8 @@
   ```
     
   
-  # Provision a full environment from scratch in 10 steps:
+# Provision a full environment from scratch in 10 steps:
+
     	1. VPC
 	2. Internet Gateway and VPC Attachment
 	3. Route Table with Public Route
@@ -53,7 +54,7 @@
 	9. EIPs Allocation and EC2 instances Association
 	
   
-  ## 1. Create a VPC
+## 1. Create a VPC
   ```powershell
   aws ec2 create-vpc \
   	--cidr-block 10.69.0.0/16 \
@@ -61,7 +62,7 @@
   ```
   
   
-  ## 2. Create Internet Gateway (IGW) and Attach IGW to VPC
+## 2. Create Internet Gateway (IGW) and Attach IGW to VPC
   ```bash
   aws ec2 create-internet-gateway --tag-specifications ResourceType=internet-gateway,Tags='[{Key=Name, Value=myIGW}]'
   ```
@@ -71,7 +72,7 @@
 	--vpc-id vpc-062f367e1f4179f33
   ```	
 
-  ## 3. Create Route Table with Public Route
+## 3. Create Route Table with Public Route
   ```
   aws ec2 create-route-table \
 	--vpc-id vpc-062f367e1f4179f33 \
@@ -86,7 +87,7 @@
 	--gateway-id igw-05ef0911baf4ed97d
   ```	
 
-  ## 4. Create 2 Subnets in VPC
+## 4. Create 2 Subnets in VPC
   ```
   aws ec2 describe-subnets
   ```
@@ -112,7 +113,7 @@
 	--tag-specifications ResourceType=subnet,Tags='[{Key=Name,Value=Subnet-2}]'
   ```
 
-  ## 5. Associate subnets with Route Table
+## 5. Associate subnets with Route Table
   ```
   aws ec2 associate-route-table \
 	--route-table-id rtb-08fabc600737d3608 \
@@ -124,14 +125,14 @@
 	--subnet-id subnet-071f789533599fd73
   ```
 
-  ## 6. Create a KP
+## 6. Create a KP
   ```
   aws ec2 create-key-pair \
 	--key-name myKeyPair \
 	--tag-specifications ResourceType=key-pair,Tags='[{Key=Owner,Value=Mika}]'
   ```
 
-  ## 7. Create a SG with HTTP and RDC (or SSH) Rules
+## 7. Create a SG with HTTP and RDC (or SSH) Rules
   ```
   aws ec2 create-security-group \
 	--group-name webRDC \
@@ -147,7 +148,7 @@
 	--ip-permissions IpProtocol=tcp,FromPort=3389,ToPort=3389,IpRanges='[{CidrIp=0.0.0.0/0}]' IpProtocol=tcp,FromPort=80,ToPort=80,IpRanges='[{CidrIp=0.0.0.0/0}]'
   ```
 
-  ## 8. Launch 2 EC2 instances
+## 8. Launch 2 EC2 instances
   ```
   aws ec2 run-instances \
 	--image-id ami-0f9a92942448ac56f \
@@ -168,7 +169,7 @@
 	--tag-specifications ResourceType=instance,Tags='[{Key=Name,Value=Instance-2}]'
   ```
 
-  ## 9. Allocate 2 EIPs and Associate them with the EC2 instances
+## 9. Allocate 2 EIPs and Associate them with the EC2 instances
   ```shell
   aws ec2 allocate-address \
 	--tag-specifications ResourceType=elastic-ip,Tags='[{Key=Name,Value=EIP-1}]'
@@ -188,4 +189,4 @@
 	--instance-id i-0ed16a3c26a14b326 \
 	--allocation-id eipalloc-0e294989374e53a58
   ```
-  
+
