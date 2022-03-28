@@ -1,17 +1,17 @@
 # AWS CLI LAB
 
 
-# Install and coinfigure AWS CLI
+# Install and configure your AWS CLI
 
-## 1. Run from powershell
-```powershell
-msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
-```
+  1. Run from powershell
+  ```powershell
+  msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+  ```
 
-## 2. Check version
-```powershell
-aws --version
-```
+  2. Check version
+  ```powershell
+  aws --version
+  ```
 
 ## Credentials Profiles & Config Profiles
 
@@ -34,12 +34,24 @@ aws --version
   [MIKA]
   aws_access_key_id=AKIAI44QH8DHBEXAMPLE
   aws_secret_access_key=je7MtGbClwBF/2Zp9Utk/h3yCo8nvbEXAMPLEKEY
+  
+  [user2]
+  aws_access_key_id=AKIAI55FG4DCCEXAMPLE
+  aws_secret_access_key=tu8ZtGbClwZZ/AAp7Val/h4xFi7nokEXAMPLEKEY
   ```
+    
   
-  
-  
-  
-  # Create a full environment from scratch: VPC, IGW, 
+  # Provision a full environment from scratch in 10 steps:
+    	1. VPC
+	2. Internet Gateway and VPC Attachment
+	3. Route Table with Public Route
+	4. Subnets
+	5. Subnets-Route Table Association
+	6. Key Pair
+	7. Security Group with Rules
+	8. EC2 Instances
+	9. EIPs Allocation and EC2 instances Association
+	
   
   ## 1. Create a VPC
   ```powershell
@@ -49,26 +61,24 @@ aws --version
   ```
   
   
-  ## 2. Create Internet Gateway (IGW)
+  ## 2. Create Internet Gateway (IGW) and Attach IGW to VPC
   ```bash
   aws ec2 create-internet-gateway --tag-specifications ResourceType=internet-gateway,Tags='[{Key=Name, Value=myIGW}]'
   ```
-  
-  ## 3. Attach IGW to VPC
-  ```awscli
+  ```
   aws ec2 attach-internet-gateway \
 	--internet-gateway-id igw-05ef0911baf4ed97d \ 
 	--vpc-id vpc-062f367e1f4179f33
   ```	
 
-  ## 4. Create Route Table
+  ## 3. Create Route Table with Public Route
   ```
   aws ec2 create-route-table \
 	--vpc-id vpc-062f367e1f4179f33 \
 	--tag-specifications ResourceType=route-table,Tags='[{Key=Name, Value=Public-RT}]'
   ```
 
-  ## 5. Create a Public Route in Route Table 
+  Create a Public Route in Route Table 
   ```
   aws ec2 create-route \
 	--route-table-id rtb-08fabc600737d3608 \
@@ -76,7 +86,7 @@ aws --version
 	--gateway-id igw-05ef0911baf4ed97d
   ```	
 
-  ## 6. Create 2 Subnets in VPC
+  ## 4. Create 2 Subnets in VPC
   ```
   aws ec2 describe-subnets
   ```
@@ -102,7 +112,7 @@ aws --version
 	--tag-specifications ResourceType=subnet,Tags='[{Key=Name,Value=Subnet-2}]'
   ```
 
-  ## 7. Associate subnets with Route Table
+  ## 5. Associate subnets with Route Table
   ```
   aws ec2 associate-route-table \
 	--route-table-id rtb-08fabc600737d3608 \
@@ -114,14 +124,14 @@ aws --version
 	--subnet-id subnet-071f789533599fd73
   ```
 
-  ## 8. Create a KP
+  ## 6. Create a KP
   ```
   aws ec2 create-key-pair \
 	--key-name myKeyPair \
 	--tag-specifications ResourceType=key-pair,Tags='[{Key=Owner,Value=Mika}]'
   ```
 
-  ## 9. Create a SG
+  ## 7. Create a SG with HTTP and RDC (or SSH) Rules
   ```
   aws ec2 create-security-group \
 	--group-name webRDC \
@@ -137,7 +147,7 @@ aws --version
 	--ip-permissions IpProtocol=tcp,FromPort=3389,ToPort=3389,IpRanges='[{CidrIp=0.0.0.0/0}]' IpProtocol=tcp,FromPort=80,ToPort=80,IpRanges='[{CidrIp=0.0.0.0/0}]'
   ```
 
-  ## 10. Launch 2 EC2 instances
+  ## 8. Launch 2 EC2 instances
   ```
   aws ec2 run-instances \
 	--image-id ami-0f9a92942448ac56f \
@@ -158,7 +168,7 @@ aws --version
 	--tag-specifications ResourceType=instance,Tags='[{Key=Name,Value=Instance-2}]'
   ```
 
-  ## 11. Allocate 2 EIPs
+  ## 9. Allocate 2 EIPs and Associate them with the EC2 instances
   ```shell
   aws ec2 allocate-address \
 	--tag-specifications ResourceType=elastic-ip,Tags='[{Key=Name,Value=EIP-1}]'
@@ -167,8 +177,7 @@ aws --version
   aws ec2 allocate-address \
 	--tag-specifications ResourceType=elastic-ip,Tags='[{Key=Name,Value=EIP-2}]'
   ```
-
-  ## 12. Associate EIPs with the instances
+  Associate EIPs with the instances
   ```powershell
   aws ec2 associate-address \
 	--instance-id i-04372c921501c3e70 \
