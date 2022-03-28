@@ -56,23 +56,23 @@
 
   
 ## 1. Create a VPC
-  ```powershell
-  aws ec2 create-vpc \
-  	--cidr-block 10.69.0.0/16 \
-  	--tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="VPC from CLI"},{Key=Owner,Value="MIKA"}]'
-  ```
+  	```powershell
+  	aws ec2 create-vpc \
+  		--cidr-block 10.69.0.0/16 \
+  		--tag-specifications ResourceType=vpc,Tags='[{Key=Name,Value="VPC from CLI"},{Key=Owner,Value="MIKA"}]'
+  	```
   
   
 ## 2. Create Internet Gateway (IGW) and Attach IGW to VPC
-  ```bash
-  aws ec2 create-internet-gateway \
-	--tag-specifications ResourceType=internet-gateway,Tags='[{Key=Name, Value=myIGW}]'
-  ```
-  ```powershell
-  aws ec2 attach-internet-gateway \
-	--internet-gateway-id igw-05ef0911baf4ed97d \ 
-	--vpc-id vpc-062f367e1f4179f33
-  ```	
+  	```bash
+  	aws ec2 create-internet-gateway \
+		--tag-specifications ResourceType=internet-gateway,Tags='[{Key=Name, Value=myIGW}]'
+  	```
+  	```powershell
+  	aws ec2 attach-internet-gateway \
+		--internet-gateway-id igw-05ef0911baf4ed97d \ 
+		--vpc-id vpc-062f367e1f4179f33
+  	```	
 
 ## 3. Create Route Table with Public Route
   ```
