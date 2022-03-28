@@ -43,16 +43,16 @@
   
 # Provision a full environment from scratch in 10 steps:
 
-* 1/ VPC
+* 1- VPC
 * 2- Internet Gateway and VPC Attachment
-* 3. Route Table with Public Route
-* 4> Subnets
-* 5. Subnets-Route Table Association
-* 6. Key Pair
-* 7. Security Group with Rules
-* 8. EC2 Instances
-* 9. EIPs Allocation and EC2 instances Association
-* 10. Connect and test
+* 3- Route Table with Public Route
+* 4- Subnets
+* 5- Subnets-Route Table Association
+* 6- Key Pair
+* 7- Security Group with Rules
+* 8- EC2 Instances
+* 9- EIPs Allocation and EC2 instances Association
+* 10- Connect and test
 
   
 ## 1. Create a VPC
@@ -192,3 +192,7 @@
 	--allocation-id eipalloc-0e294989374e53a58
   ```
 
+  ## 10. Connect to the EC2 instances using either RDP (port 3389) for Windows or SSH (port 22) for Linux/Mac
+  ```shell
+  ssh -i /path/my-key-pair.pem ec2-user@my-instance-public-dns-name
+  ```
