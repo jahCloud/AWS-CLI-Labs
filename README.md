@@ -41,7 +41,7 @@
   ```
     
   
-# Provision a full environment from scratch in 10 steps:
+# Provision a basic environment from scratch in 10 steps:
 
 * 1- VPC
 * 2- Internet Gateway and VPC Attachment
@@ -51,8 +51,8 @@
 * 6- Key Pair
 * 7- Security Group with Rules
 * 8- EC2 Instances
-* 9- EIPs Allocation and EC2 instances Association
-* 10- Connect and test
+* 9- EIPs Allocation and EC2 Instances Association
+* 10- Connect and Test
 
   
 ## 1. Create a VPC
@@ -64,7 +64,7 @@
   
   
 ## 2. Create Internet Gateway (IGW) and Attach IGW to VPC
-  ```bash
+  ```powershell
   aws ec2 create-internet-gateway \
 	--tag-specifications ResourceType=internet-gateway,Tags='[{Key=Name, Value=myIGW}]'
   ```
@@ -75,14 +75,14 @@
   ```	
 
 ## 3. Create Route Table with Public Route
-  ```
+  ```powershell
   aws ec2 create-route-table \
 	--vpc-id vpc-062f367e1f4179f33 \
 	--tag-specifications ResourceType=route-table,Tags='[{Key=Name, Value=Public-RT}]'
   ```
 
   Create a Public Route in Route Table 
-  ```
+  ```powershell
   aws ec2 create-route \
 	--route-table-id rtb-08fabc600737d3608 \
 	--destination-cidr-block 0.0.0.0/0 \
@@ -90,15 +90,15 @@
   ```	
 
 ## 4. Create 2 Subnets in VPC
-  ```
+  ```powershell
   aws ec2 describe-subnets
   ```
-  ```
+  ```powershell
   aws ec2 describe-subnets --filters "Name=vpc-id, Values=vpc-062f367e1f4179f33"
   ```
 
   Subnet-1
-  ```
+  ```powershell
   aws ec2 create-subnet \
 	--vpc-id  vpc-062f367e1f4179f33 \
 	--cidr-block 10.69.10.0/24 \
@@ -107,7 +107,7 @@
   ```
 
   Subnet-2
-  ```
+  ```powershell
   aws ec2 create-subnet \
 	--vpc-id vpc-062f367e1f4179f33 \
 	--cidr-block 10.69.20.0/24 \
@@ -116,26 +116,26 @@
   ```
 
 ## 5. Associate subnets with Route Table
-  ```
+  ```powershell
   aws ec2 associate-route-table \
 	--route-table-id rtb-08fabc600737d3608 \
 	--subnet-id subnet-0ac8ccb75468a425a
   ```
-  ```
+  ```powershell
   aws ec2 associate-route-table \
 	--route-table-id rtb-08fabc600737d3608 \
 	--subnet-id subnet-071f789533599fd73
   ```
 
 ## 6. Create a KP
-  ```
+  ```powershell
   aws ec2 create-key-pair \
 	--key-name myKeyPair \
 	--tag-specifications ResourceType=key-pair,Tags='[{Key=Owner,Value=Mika}]'
   ```
 
 ## 7. Create a SG with HTTP and RDC (or SSH) Rules
-  ```
+  ```powershell
   aws ec2 create-security-group \
 	--group-name webRDC \
 	--description "My security group" \
@@ -144,14 +144,14 @@
   ```
 
   Add HTTP and RDC rules
-  ```
+  ```powershell
   aws ec2 authorize-security-group-ingress \
 	--group-id sg-09d878908d0fb1086 \
 	--ip-permissions IpProtocol=tcp,FromPort=3389,ToPort=3389,IpRanges='[{CidrIp=0.0.0.0/0}]' IpProtocol=tcp,FromPort=80,ToPort=80,IpRanges='[{CidrIp=0.0.0.0/0}]'
   ```
 
 ## 8. Launch 2 EC2 instances
-  ```
+  ```powershell
   aws ec2 run-instances \
 	--image-id ami-0f9a92942448ac56f \
 	--count 1 --instance-type t3.small \
@@ -160,7 +160,7 @@
 	--subnet-id subnet-0ac8ccb75468a425a \
 	--tag-specifications ResourceType=instance,Tags='[{Key=Name,Value=Instance-1}]'
   ```
-  ```
+  ```powershell
   aws ec2 run-instances \
 	--image-id ami-0f9a92942448ac56f \
 	--count 1 \
@@ -172,11 +172,11 @@
   ```
 
 ## 9. Allocate 2 EIPs and Associate them with the EC2 instances
-  ```shell
+  ```powershell
   aws ec2 allocate-address \
 	--tag-specifications ResourceType=elastic-ip,Tags='[{Key=Name,Value=EIP-1}]'
   ```
-  ```bash
+  ```powershell
   aws ec2 allocate-address \
 	--tag-specifications ResourceType=elastic-ip,Tags='[{Key=Name,Value=EIP-2}]'
   ```
@@ -193,6 +193,6 @@
   ```
 
   ## 10. Connect to the EC2 instances using either RDP (port 3389) for Windows or SSH (port 22) for Linux/Mac
-  ```shell
+  ```powershell
   ssh -i /path/my-key-pair.pem ec2-user@my-instance-public-dns-name
   ```
