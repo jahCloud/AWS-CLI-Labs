@@ -16,9 +16,8 @@
 ## Credentials Profiles & Config Profiles
 
 * Linux
-  ```
-  ~/.aws/credentials
-  ```
+  ``~/.aws/credentials``
+  ``BBB``
   
 * Windows
   ```
