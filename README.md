@@ -43,10 +43,10 @@
   
 # Provision a full environment from scratch in 10 steps:
 
-* 1. VPC
-* 2. Internet Gateway and VPC Attachment
+* 1/ VPC
+* 2- Internet Gateway and VPC Attachment
 * 3. Route Table with Public Route
-* 4. Subnets
+* 4> Subnets
 * 5. Subnets-Route Table Association
 * 6. Key Pair
 * 7. Security Group with Rules
